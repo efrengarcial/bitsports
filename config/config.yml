@@ -1,0 +1,11 @@
+database:
+  user: bitsports
+  password: password
+  addr: 127.0.0.1:5432
+  dbname: bitsports
+  params:
+    disableTLS: true
+    timezone: utc
+
+server:
+  address: 8080
