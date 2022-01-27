@@ -3,6 +3,7 @@ package usecase
 import (
 	"bitsports/internal/product/domain"
 	"bitsports/internal/product/domain/repository"
+	"bitsports/pkg/validate"
 	"context"
 )
 
@@ -19,11 +20,17 @@ func NewProduct(repo repository.IProduct) *Product {
 
 // Create insert information in the database
 func (p Product) Create(ctx context.Context, prd domain.NewProduct) (*domain.Product, error) {
+	if err := validate.Check(prd); err != nil {
+		return nil, err
+	}
 	return p.repo.Create(ctx, prd)
 }
 
 // Update  modifies data about a Product.
 func (p Product) Update(ctx context.Context, prd domain.UpdateProduct) (*domain.Product, error) {
+	if err := validate.Check(prd); err != nil {
+		return nil, err
+	}
 	return p.repo.Update(ctx, prd)
 }
 

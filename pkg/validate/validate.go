@@ -26,13 +26,3 @@ func (*Validator) Validate(i interface{}) error {
 func Check(val interface{}) error {
 	return  validate.Struct(val)
 }
-
-// CheckInt32 validates that the id is valid int32.
-func CheckInt32(id int) error {
-	var requestID = struct{
-		ID int `json:"id" validate:"gte=1,lte=2147483647"`
-	} {
-		ID: id,
-	}
-	return validate.Struct(requestID)
-}

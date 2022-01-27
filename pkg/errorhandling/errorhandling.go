@@ -77,7 +77,7 @@ func Error(logger *logrus.Logger) func(error, echo.Context) {
 			var ok bool
 			report, ok = err.(*echo.HTTPError)
 			if ok {
-				if report.Message == "missing or malformed jwt" {
+				if report.Message == "missing or malformed jwt" || report.Message == "invalid or expired jwt" {
 					report = echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 				} else {
 					report = echo.NewHTTPError(http.StatusBadRequest, "Request invalida")

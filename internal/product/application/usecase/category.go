@@ -3,6 +3,7 @@ package usecase
 import (
 	"bitsports/internal/product/domain"
 	"bitsports/internal/product/domain/repository"
+	"bitsports/pkg/validate"
 	"context"
 )
 
@@ -19,11 +20,17 @@ func NewCategory(repo repository.ICategory) *Category {
 
 // Create insert information in the database
 func (c Category) Create(ctx context.Context, cat domain.NewCategory) (*domain.Category, error) {
+	if err := validate.Check(cat); err != nil {
+		return nil, err
+	}
 	return c.repo.Create(ctx, cat)
 }
 
 // Update  modifies data about a Category.
 func (c Category) Update(ctx context.Context, cat domain.UpdateCategory) (*domain.Category, error) {
+	if err := validate.Check(cat); err != nil {
+		return nil, err
+	}
 	return c.repo.Update(ctx, cat)
 }
 
