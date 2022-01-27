@@ -9,3 +9,8 @@ database:
 
 server:
   address: 8080
+
+userServer:
+  address: 9090
+
+debug: true

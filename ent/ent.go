@@ -5,6 +5,7 @@ package ent
 import (
 	"bitsports/ent/category"
 	"bitsports/ent/product"
+	"bitsports/ent/user"
 	"errors"
 	"fmt"
 
@@ -32,6 +33,7 @@ func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		category.Table: category.ValidColumn,
 		product.Table:  product.ValidColumn,
+		user.Table:     user.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

@@ -5,6 +5,7 @@ go 1.17
 require (
 	entgo.io/ent v0.10.0
 	github.com/go-playground/validator/v10 v10.10.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/graphql-go/graphql v0.8.0
 	github.com/graphql-go/handler v0.2.3
 	github.com/labstack/echo/v4 v4.6.3
@@ -12,6 +13,7 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.10.1
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	gopkg.in/jeevatkm/go-model.v1 v1.1.0
 )
 
@@ -23,7 +25,6 @@ require (
 	github.com/go-openapi/inflect v0.19.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -44,7 +45,6 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	github.com/zclconf/go-cty v1.8.0 // indirect
-	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20210913180222-943fd674d43e // indirect
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect

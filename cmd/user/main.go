@@ -3,13 +3,12 @@ package main
 import (
 	"bitsports/config"
 	"bitsports/ent"
-	"bitsports/internal/product/adapter/graphql"
-	"bitsports/internal/product/adapter/repository"
-	"bitsports/internal/product/application/usecase"
-	infraGraphql "bitsports/internal/product/infraestructure/graphql"
-	"bitsports/internal/product/infraestructure/router"
+	"bitsports/internal/user"
+	"bitsports/internal/user/adapter"
+	"bitsports/internal/user/infraestructure"
 	"bitsports/pkg/database"
 	"context"
+	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -31,6 +30,7 @@ func init() {
 	logger.Level = logrus.InfoLevel
 }
 
+
 func main() {
 	config.ReadConfig(config.ReadConfigOption{})
 
@@ -41,25 +41,14 @@ func main() {
 
 	client := newDBClient()
 
-	repoProduct := repository.NewProduct(client)
-	repoCategory := repository.NewCategory(client)
-	ucProduct := usecase.NewProduct(repoProduct)
-	ucCategory := usecase.NewCategory(repoCategory)
-
-	schema :=  graphql.NewSchema(graphql.NewProductResolver(ucProduct),
-		graphql.NewCategoryResolver(ucCategory))
-
-	srv, err := infraGraphql.NewServer(schema)
-
-	if err!= nil {
-		logger.Fatal(err)
-	}
-
-	e := router.New(srv,logger)
+	r := adapter.NewRepository(client)
+	uc := user.NewUseCase(r)
+	e := echo.New()
+	e = infraestructure.NewRouter(e, adapter.NewHandler(uc),logger )
 
 	// Start server
 	go func() {
-		if err := e.Start(":" + config.C.Server.Address); err != nil && err != http.ErrServerClosed {
+		if err := e.Start(":" + config.C.UserServer.Address); err != nil && err != http.ErrServerClosed {
 			e.Logger.Fatal("shutting down the server")
 		}
 	}()
@@ -84,4 +73,3 @@ func newDBClient() *ent.Client {
 
 	return client
 }
-

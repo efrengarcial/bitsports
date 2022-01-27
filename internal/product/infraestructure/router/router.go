@@ -1,6 +1,7 @@
 package router
 
 import (
+	"bitsports/pkg/auth"
 	"bitsports/pkg/errorhandling"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -10,13 +11,11 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// QueryPath Path of route
-const (
-	QueryPath      = "/graphql"
-)
+// _queryPath Path of route
+const _queryPath = "/graphql"
 
 // New creates route endpoint
-func New(srv *handler.Handler, logger *logrus.Logger) *echo.Echo {
+func New(h *handler.Handler, logger *logrus.Logger) *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.Recover())
 	e.HTTPErrorHandler = errorhandling.Error(logger)
@@ -27,7 +26,19 @@ func New(srv *handler.Handler, logger *logrus.Logger) *echo.Echo {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderXRequestedWith, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
 	}))
 
-	e.POST(QueryPath, echo.WrapHandler(srv))
+	// Restricted from here
+	r := e.Group(_queryPath)
+	key, err := auth.GetRSAPublicKey()
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey:    key,
+		SigningMethod: "RS256",
+	}))
+
+	r.POST("", echo.WrapHandler(h))
 
 	return e
 }

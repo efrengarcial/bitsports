@@ -26,6 +26,10 @@ type config struct {
 	Server struct {
 		Address string
 	}
+	UserServer struct {
+		Address string
+	}
+	Debug bool
 }
 
 // C is config variable

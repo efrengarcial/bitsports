@@ -53,16 +53,23 @@ func Error(logger *logrus.Logger) func(error, echo.Context) {
 					case "alpha":
 						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' campo solo permite caracteres.",
 							err.Field())
-					case "len":
-						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' longitud del campo es %s",
-							err.Field(), err.Param())
+					case "required":
+						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' campo es requerido",
+							err.Field())
 					case "gte":
 						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' longitud del campo debe ser mayor o igual a %s",
 							err.Field(), err.Param())
 					case "lte":
 						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' longitud del campo debe ser menor o igual a %s",
 							err.Field(), err.Param())
+					case "eqfield":
+						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' se debe ingresar la confirmación del campo %s",
+							err.Field(), err.Param())
+					case "email":
+						message[strings.ToLower(err.Field())] = fmt.Sprintf("'%s' no es un correo válido",
+							err.Field())
 					}
+
 				}
 				report = echo.NewHTTPError(http.StatusBadRequest, message)
 			}
@@ -70,7 +77,12 @@ func Error(logger *logrus.Logger) func(error, echo.Context) {
 			var ok bool
 			report, ok = err.(*echo.HTTPError)
 			if ok {
-				report = echo.NewHTTPError(http.StatusBadRequest, "Request invalida")
+				if report.Message == "missing or malformed jwt" {
+					report = echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
+				} else {
+					report = echo.NewHTTPError(http.StatusBadRequest, "Request invalida")
+				}
+
 				logger.Debug(fmt.Sprintf("Error: %+v", err))
 			} else {
 				report = echo.NewHTTPError(http.StatusInternalServerError, "Error Interno del Servidor")
