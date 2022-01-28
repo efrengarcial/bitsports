@@ -54,7 +54,7 @@ func categoryMutation(s Schema) graphql.Fields {
 			Resolve: s.categoryResolver.Update,
 		},
 		"deleteCategory": &graphql.Field{
-			Type:        productType,
+			Type:        categoryType,
 			Description: "Delete category by id",
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{

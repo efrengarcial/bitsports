@@ -1,5 +1,5 @@
 database:
-  user: bitsports
+  user: postgres
   password: password
   addr: 127.0.0.1:5432
   dbname: bitsports

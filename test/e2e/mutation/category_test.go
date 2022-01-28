@@ -10,8 +10,8 @@ import (
 	"testing"
 )
 
-func TestProduct_Create(t *testing.T) {
-	expect, client , teardown := e2e.Setup(t, container, "e2eproductcreate")
+func TestCategory_Create(t *testing.T) {
+	expect, _ , teardown := e2e.Setup(t, container, "e2ecategorycreate")
 	defer teardown()
 
 	tests := []struct {
@@ -25,27 +25,17 @@ func TestProduct_Create(t *testing.T) {
 		teardown func(t *testing.T)
 	}{
 		{
-			name:    "It should create test product",
+			name:    "It should create test category",
 			arrange: func(t *testing.T) {},
 			act: func(t *testing.T) *httpexpect.Response {
-
-				c, err := client.Category.Create().
-					SetCode("test").
-					SetName("test").
-					Save(context.Background())
-				if err != nil {
-					t.Error(err)
-					t.FailNow()
-				}
 
 				return expect.POST(router.QueryPath).WithJSON(map[string]string{
 					"query": `
 						mutation {
-							createProduct( name: "Naranja", price: 11.52, quantity: 100,  categoryId:`+ strconv.FormatInt(c.ID, 10) + `) {
-								price
+							createCategory( name: "Frutas", code: "FRU") {
+								code
 								name
 								id
-								quantity
 								createdAt
 								updatedAt
 						}
@@ -55,21 +45,21 @@ func TestProduct_Create(t *testing.T) {
 			assert: func(t *testing.T, got *httpexpect.Response) {
 				got.Status(http.StatusOK)
 				data := e2e.GetData(got).Object()
-				testUser := e2e.GetObject(data, "createProduct")
-				testUser.Value("quantity").Number().Equal(100)
-				testUser.Value("name").String().Equal("Naranja")
+				testUser := e2e.GetObject(data, "createCategory")
+				testUser.Value("code").String().Equal("FRU")
+				testUser.Value("name").String().Equal("Frutas")
 			},
 			teardown: func(t *testing.T) { },
 		},
 		{
-			name:    "It should NOT create test product when the length of the name is over",
+			name:    "It should NOT create test category when the length of the code is over",
 			arrange: func(t *testing.T) {},
 			act: func(t *testing.T) *httpexpect.Response {
 				return expect.POST(router.QueryPath).WithJSON(map[string]string{
 					"query": `
 						mutation {  
-							createProduct(name: "Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1", quantity: 20}) {   
-								quantity
+							createCategory(name: "FRU", code: "Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1Tom1T"}) {   
+								code
 								name
 								id    
 								createdAt    
@@ -100,8 +90,8 @@ func TestProduct_Create(t *testing.T) {
 	}
 }
 
-func TestProduct_Update(t *testing.T) {
-	expect, client , teardown := e2e.Setup(t, container, "e2eproductupdate")
+func TestCategory_Update(t *testing.T) {
+	expect, client , teardown := e2e.Setup(t, container, "e2ecategoryupdate")
 	defer teardown()
 
 	tests := []struct {
@@ -115,7 +105,7 @@ func TestProduct_Update(t *testing.T) {
 		teardown func(t *testing.T)
 	}{
 		{
-			name:    "It should update test product",
+			name:    "It should update test category",
 			arrange: func(t *testing.T) {},
 			act: func(t *testing.T) *httpexpect.Response {
 
@@ -123,18 +113,7 @@ func TestProduct_Update(t *testing.T) {
 
 				c, err := client.Category.Create().
 					SetCode("ABC").
-					SetName("Frutas").
-					Save(ctx)
-				if err != nil {
-					t.Error(err)
-					t.FailNow()
-				}
-				p, err := client.Product.
-					Create().
-					SetName("Banano").
-					SetPrice(1000).
-					SetQuantity(10).
-					SetCategoryID(c.ID).
+					SetName("Frutal").
 					Save(ctx)
 				if err != nil {
 					t.Error(err)
@@ -144,11 +123,10 @@ func TestProduct_Update(t *testing.T) {
 				return expect.POST(router.QueryPath).WithJSON(map[string]string{
 					"query": `
 						mutation {
-							updateProduct( name: "Naranja", price: 11.52, quantity: 100,  id:`+ strconv.FormatInt(p.ID, 10) + `) {
-								price
+							updateCategory( name: "Frutas", code : "FRU" ,  id:`+ strconv.FormatInt(c.ID, 10) + `) {
+								code
 								name
 								id
-								quantity
 								createdAt
 								updatedAt
 						}
@@ -158,9 +136,9 @@ func TestProduct_Update(t *testing.T) {
 			assert: func(t *testing.T, got *httpexpect.Response) {
 				got.Status(http.StatusOK)
 				data := e2e.GetData(got).Object()
-				testUser := e2e.GetObject(data, "updateProduct")
-				testUser.Value("quantity").Number().Equal(100)
-				testUser.Value("name").String().Equal("Naranja")
+				testUser := e2e.GetObject(data, "updateCategory")
+				testUser.Value("code").String().Equal("FRU")
+				testUser.Value("name").String().Equal("Frutas")
 			},
 			teardown: func(t *testing.T) { },
 		},
@@ -176,8 +154,8 @@ func TestProduct_Update(t *testing.T) {
 	}
 }
 
-func TestProduct_Delete(t *testing.T) {
-	expect, client , teardown := e2e.Setup(t, container, "e2eproductdelete")
+func TestCategory_Delete(t *testing.T) {
+	expect, client , teardown := e2e.Setup(t, container, "e2ecategorydelete")
 	defer teardown()
 
 	tests := []struct {
@@ -191,7 +169,7 @@ func TestProduct_Delete(t *testing.T) {
 		teardown func(t *testing.T)
 	}{
 		{
-			name:    "It should delete test product",
+			name:    "It should delete test category",
 			arrange: func(t *testing.T) {},
 			act: func(t *testing.T) *httpexpect.Response {
 
@@ -205,26 +183,14 @@ func TestProduct_Delete(t *testing.T) {
 					t.Error(err)
 					t.FailNow()
 				}
-				p, err := client.Product.
-					Create().
-					SetName("Banano").
-					SetPrice(1000).
-					SetQuantity(10).
-					SetCategoryID(c.ID).
-					Save(ctx)
-				if err != nil {
-					t.Error(err)
-					t.FailNow()
-				}
 
 				return expect.POST(router.QueryPath).WithJSON(map[string]string{
 					"query": `
 						mutation {
-							deleteProduct( id:`+ strconv.FormatInt(p.ID, 10) + `) {
-								price
+							deleteCategory( id:`+ strconv.FormatInt(c.ID, 10) + `) {
+								code
 								name
 								id
-								quantity
 								createdAt
 								updatedAt
 						}
@@ -234,7 +200,7 @@ func TestProduct_Delete(t *testing.T) {
 			assert: func(t *testing.T, got *httpexpect.Response) {
 				got.Status(http.StatusOK)
 				data := e2e.GetData(got).Object()
-				testUser := e2e.GetObject(data, "deleteProduct")
+				testUser := e2e.GetObject(data, "deleteCategory")
 				testUser.Value("id").Null()
 			},
 			teardown: func(t *testing.T) { },
@@ -250,4 +216,3 @@ func TestProduct_Delete(t *testing.T) {
 		})
 	}
 }
-

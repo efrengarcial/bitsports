@@ -69,6 +69,10 @@ func GetObject(obj *httpexpect.Object, path string) *httpexpect.Object {
 	return obj.Path("$." + path).Object()
 }
 
+func GetArray(obj *httpexpect.Object, path string) *httpexpect.Array {
+	return obj.Path("$." + path).Array()
+}
+
 // GetErrors return errors from graphql response.
 func GetErrors(e *httpexpect.Response) *httpexpect.Value {
 	return e.JSON().Path("$.errors")
