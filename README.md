@@ -75,10 +75,10 @@ Estos son los pasos para ejecutarlo con `docker-compose`
 
 ```bash
 # clonar el proyecto
-$ git clone https://github.com/efrengarcial/beer-service
+$ git clone https://github.com/efrengarcial/bitsports
 
 # mover al proyecto
-$ cd beer-service
+$ cd bitsports
 
 # Construir la imagen docker y Ejecutar la aplicación 
 $ make run
@@ -97,8 +97,9 @@ $ docker-compose down
 
 # Posibles improvements:
 
-* Se podría cachear o guardar en base de datos la respuesta de la API que provee información sobre la tasa de cambio
-  para evitar estar usando el API a cado momento.
+* Manejo amigle de errores  en el api de productos y categorias
+* Pruebas unitarias en el microservicio de usuarios
+* Unificar manejo de logs
 
 ----
 
@@ -106,7 +107,5 @@ $ docker-compose down
 
 * La primera ejecución de las pruebas se demora un poco mientras descarga la imagen docker de postgres:
   postgres:14-alpine
-* Se adiciona la funcionalidad de actualización del listado de monedas (currency) disponibles en la solución, dicha
-  actualización se realiza por medio de un cron que se configura a través del key: currencyapi.delay del archivo ".env"
 
 ----
