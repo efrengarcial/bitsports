@@ -44,16 +44,22 @@ type ReadConfigOption struct {
 func ReadConfig(option ReadConfigOption) {
 	Config := &C
 
-	if environment.IsDev() {
+	println("os.Getenv(APP_ENV): ", os.Getenv("APP_ENV"))
+
+	if environment.IsProd() {
 		viper.AddConfigPath(filepath.Join(rootDir(), "config"))
-		viper.SetConfigName("config")
+		viper.SetConfigName("config.prod")
+	} else if environment.IsMig() {
+		viper.AddConfigPath(filepath.Join(rootDir(), "config"))
+		viper.SetConfigName("config.mig")
 	} else if environment.IsTest() || (option.AppEnv == environment.Test) {
 		fmt.Println(rootDir())
 		viper.AddConfigPath(filepath.Join(rootDir(), "config"))
 		viper.SetConfigName("config.test")
 	} else {
-		// production configuration here
-		fmt.Println("production configuration here")
+		fmt.Println(rootDir())
+		viper.AddConfigPath(filepath.Join(rootDir(), "config"))
+		viper.SetConfigName("config")
 	}
 
 	viper.SetConfigType("yml")

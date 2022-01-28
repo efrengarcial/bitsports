@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  product:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"
+    environment:
+      - APP_ENV=prod
+    depends_on:
+      - postgres
+
+  user:
+    build:
+      context: .
+      dockerfile: User.Dockerfile
+    ports:
+      - "9002:9002"
+    environment:
+      - APP_ENV=prod
+    depends_on:
+      - postgres
+
+
+  postgres:
+    image: postgres:14.0-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=bitsports
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

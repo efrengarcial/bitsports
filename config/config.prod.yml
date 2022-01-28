@@ -1,0 +1,16 @@
+database:
+  user: postgres
+  password: password
+  addr: postgres:5432
+  dbname: bitsports
+  params:
+    disableTLS: true
+    timezone: utc
+
+server:
+  address: 9001
+
+userServer:
+  address: 9002
+
+debug: true

@@ -29,7 +29,7 @@ func WithoutSecurity() RouteOption {
 // New creates route endpoint
 func New(h *handler.Handler, logger *logrus.Logger, opts ...RouteOption) *echo.Echo {
 
-	option := &route{ EnableSecurity: false}
+	option := &route{ EnableSecurity: true}
 	for _, opt := range opts {
 		opt(option)
 	}
