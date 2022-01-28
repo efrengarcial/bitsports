@@ -13,8 +13,8 @@ var (
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "code", Type: field.TypeString, Size: 20, SchemaType: map[string]string{"postgres": "varchar(20)"}},
 		{Name: "name", Type: field.TypeString, Size: 100, SchemaType: map[string]string{"postgres": "varchar(100)"}},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp DEFAULT CURRENT_TIMESTAMP"}},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp"}},
 	}
 	// CategoriesTable holds the schema information for the "categories" table.
 	CategoriesTable = &schema.Table{
@@ -28,8 +28,8 @@ var (
 		{Name: "name", Type: field.TypeString, Size: 100, SchemaType: map[string]string{"postgres": "varchar(100)"}},
 		{Name: "price", Type: field.TypeFloat64, SchemaType: map[string]string{"postgres": "numeric(9,2)"}},
 		{Name: "quantity", Type: field.TypeInt64},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp DEFAULT CURRENT_TIMESTAMP"}},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp"}},
 		{Name: "category_id", Type: field.TypeInt64, Nullable: true},
 	}
 	// ProductsTable holds the schema information for the "products" table.
@@ -52,8 +52,8 @@ var (
 		{Name: "name", Type: field.TypeString, Size: 100, SchemaType: map[string]string{"postgres": "varchar(100)"}},
 		{Name: "email", Type: field.TypeString, Size: 100, SchemaType: map[string]string{"postgres": "varchar(100)"}},
 		{Name: "password_hash", Type: field.TypeBytes},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp DEFAULT CURRENT_TIMESTAMP"}},
+		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp"}},
+		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "timestamp"}},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{

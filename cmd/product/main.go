@@ -8,7 +8,7 @@ import (
 	"bitsports/internal/product/application/usecase"
 	infraGraphql "bitsports/internal/product/infraestructure/graphql"
 	"bitsports/internal/product/infraestructure/router"
-	"bitsports/pkg/database"
+	"bitsports/pkg/datasource"
 	"context"
 	"github.com/sirupsen/logrus"
 	"net/http"
@@ -42,20 +42,20 @@ func main() {
 	client := newDBClient()
 
 	repoProduct := repository.NewProduct(client)
-	repoCategory := repository.NewCategory(client)
 	ucProduct := usecase.NewProduct(repoProduct)
+	repoCategory := repository.NewCategory(client)
 	ucCategory := usecase.NewCategory(repoCategory)
 
 	schema :=  graphql.NewSchema(graphql.NewProductResolver(ucProduct),
 		graphql.NewCategoryResolver(ucCategory))
 
-	srv, err := infraGraphql.NewServer(schema)
+	handler, err := infraGraphql.NewServer(schema)
 
 	if err!= nil {
 		logger.Fatal(err)
 	}
 
-	e := router.New(srv,logger)
+	e := router.New(handler,logger)
 
 	// Start server
 	go func() {
@@ -77,7 +77,7 @@ func main() {
 }
 
 func newDBClient() *ent.Client {
-	client, err := database.NewClient()
+	client, err := datasource.NewClient()
 	if err != nil {
 		logger.Fatalf("failed opening mysql client: %v", err)
 	}

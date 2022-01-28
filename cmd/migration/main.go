@@ -4,7 +4,7 @@ import (
 	"bitsports/config"
 	"bitsports/ent"
 	"bitsports/ent/migrate"
-	"bitsports/pkg/database"
+	"bitsports/pkg/datasource"
 	"context"
 	"log"
 )
@@ -12,7 +12,7 @@ import (
 func main() {
 	config.ReadConfig(config.ReadConfigOption{})
 
-	client, err := database.NewClient()
+	client, err := datasource.NewClient()
 	if err != nil {
 		log.Fatalf("failed opening mysql client: %v", err)
 	}

@@ -25,14 +25,14 @@ func (m DatetimeMixin) Fields() []ent.Field {
 		field.Time("created_at").
 			Default(time.Now).
 			SchemaType(map[string]string{
-				dialect.Postgres: "timestamp DEFAULT CURRENT_TIMESTAMP",
+				dialect.Postgres: "timestamp",
 			}).
 			Immutable(),
 		field.Time("updated_at").
 			Default(time.Now).
 			UpdateDefault(time.Now).
 			SchemaType(map[string]string{
-				dialect.Postgres: "timestamp DEFAULT CURRENT_TIMESTAMP",
+				dialect.Postgres: "timestamp",
 			}).
 			Immutable(),
 	}

@@ -11,11 +11,29 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// _queryPath Path of route
-const _queryPath = "/graphql"
+// QueryPath Path of route
+const QueryPath = "/graphql"
+
+type route struct {
+	EnableSecurity bool
+}
+
+type RouteOption func(*route)
+
+func WithoutSecurity() RouteOption {
+	return func(r *route) {
+		r.EnableSecurity = false
+	}
+}
 
 // New creates route endpoint
-func New(h *handler.Handler, logger *logrus.Logger) *echo.Echo {
+func New(h *handler.Handler, logger *logrus.Logger, opts ...RouteOption) *echo.Echo {
+
+	option := &route{ EnableSecurity: false}
+	for _, opt := range opts {
+		opt(option)
+	}
+
 	e := echo.New()
 	e.Use(middleware.Recover())
 	e.HTTPErrorHandler = errorhandling.Error(logger)
@@ -27,16 +45,18 @@ func New(h *handler.Handler, logger *logrus.Logger) *echo.Echo {
 	}))
 
 	// Restricted from here
-	r := e.Group(_queryPath)
-	key, err := auth.GetRSAPublicKey()
-	if err != nil {
-		logger.Fatal(err)
-	}
+	r := e.Group(QueryPath)
+	if option.EnableSecurity {
+		key, err := auth.GetRSAPublicKey()
+		if err != nil {
+			logger.Fatal(err)
+		}
 
-	r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey:    key,
-		SigningMethod: "RS256",
-	}))
+		r.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+			SigningKey:    key,
+			SigningMethod: "RS256",
+		}))
+	}
 
 	r.POST("", echo.WrapHandler(h))
 

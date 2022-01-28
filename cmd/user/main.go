@@ -6,7 +6,7 @@ import (
 	"bitsports/internal/user"
 	"bitsports/internal/user/adapter"
 	"bitsports/internal/user/infraestructure"
-	"bitsports/pkg/database"
+	"bitsports/pkg/datasource"
 	"context"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -66,7 +66,7 @@ func main() {
 }
 
 func newDBClient() *ent.Client {
-	client, err := database.NewClient()
+	client, err := datasource.NewClient()
 	if err != nil {
 		logger.Fatalf("failed opening mysql client: %v", err)
 	}
