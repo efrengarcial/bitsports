@@ -4,8 +4,8 @@ import "github.com/graphql-go/graphql"
 
 func productQuery(s Schema) graphql.Fields {
 	return graphql.Fields{
-		/* Get (read) single product by id
-		   http://localhost:8080/graphql?query={product(id:1){name,price}}
+		/* Post (read) single product by id
+		   http://localhost:9001/graphql?query={product(id:1){name,price}}
 		*/
 		"product": &graphql.Field{
 			Type:        productType,
@@ -18,7 +18,7 @@ func productQuery(s Schema) graphql.Fields {
 			Resolve: s.productResolver.QueryByID,
 		},
 		/* Get (read) product list
-		   http://localhost:8080/graphql?query={products{id,name,price}}
+		   http://localhost:9001/graphql?query={products{id,name,price}}
 		*/
 		"products": &graphql.Field{
 			Type:        graphql.NewList(productType),
@@ -31,7 +31,7 @@ func productQuery(s Schema) graphql.Fields {
 func productMutation(s Schema) graphql.Fields {
 	return graphql.Fields{
 		/* Create new product item
-		http://localhost:8080/graphql?query=mutation+_{createProduct(name:"xxx" ,price:1.99){id,name,info,price}}
+		http://localhost:9001/graphql?query=mutation+_{createProduct(name:"xxx" ,price:1.99){id,name,price}}
 		*/
 		"createProduct": &graphql.Field{
 			Type:        productType,
@@ -54,7 +54,7 @@ func productMutation(s Schema) graphql.Fields {
 		},
 
 		/* Update product by id
-		   http://localhost:8080/graphql?query=mutation+_{updateProduct(id:1,price:3.95){id,name,info,price}}
+		   http://localhost:9001/graphql?query=mutation+_{updateProduct(id:1,price:3.95){id,name,info,price}}
 		*/
 		"updateProduct": &graphql.Field{
 			Type:        productType,
@@ -80,7 +80,7 @@ func productMutation(s Schema) graphql.Fields {
 		},
 
 		/* Delete product by id
-		   http://localhost:8080/graphql?query=mutation+_{delete(id:1){id,name,price}}
+		   http://localhost:9001/graphql?query=mutation+_{delete(id:1){id,name,price}}
 		*/
 		"deleteProduct": &graphql.Field{
 			Type:        productType,

@@ -1,6 +1,6 @@
 ﻿# API Productos
 
-crear un API en GraphQL donde puedas autenticar por medio de JWT, una
+Crear un API en GraphQL donde puedas autenticar por medio de JWT, una
 vez autenticado poder acceder a los endpoints de products y categories y hacer
 el respectivo CRUD de cada una de las entidades, debes guardar esto en una
 base de datos PostgreSQL y realizar las pruebas unitarias.
@@ -51,7 +51,7 @@ La solución tiene 4 capas :
 * [GitHub] - Sistema de control de versiones
 * [Go Modules] - Herramienta para la gestión de dependencias
 * [Echo] - Framework para la creación de API REST
-* [graphql-go/graphql] - Framework para la creación de API GraphQl 
+* [graphql-go/graphql] - Framework para la creación de API GraphQL
 * [IntelliJ] - Ide de desarrollo
 * [PostgreSQL] - Base de datos
 * [Ent] - ORM
@@ -86,8 +86,23 @@ $ make run
 # check if the containers are running
 $ docker ps
 
-# Ejeuctar la llamada
-$ curl -X GET "http://localhost:8080/beers" -H  "accept: */*" -H  "Content-Type: application/json-patch+json" 
+# Ejeuctar la llamada de creación de usuario
+$curl -X POST "http://localhost:9002/users" -H  "accept: */*" -H  "Content-Type: application/json-patch+json" -d "{ \"name\": \"Efren\",\"email\": \"efren.gl@gmail.com\", \"password\" : \"12345678\",  \"password_confirm\" : \"12345678\" }" 
+
+# Ejeuctar la llamada de obtener token
+$curl -X GET 'http://localhost:9002/token' -H 'Authorization: Basic ZWZyZW4uZ2xAZ21haWwuY29tOjEyMzQ1Njc4'
+
+# Ejecutar creación de una categoria, actualizar token
+curl --location -g --request POST 'http://localhost:9001/graphql?query=mutation+_{createCategory(name:"frutas" ,code:"abc"){id,name,code}}' \
+--header 'Authorization: Bearer ${token}'
+
+# Ejecutar creación de producto, actualizar token
+curl --location -g --request POST 'http://localhost:9001/graphql?query=mutation+_{createProduct(name:"banano" ,price:1.99, quantity: 1000, categoryId:1){id,name,price}}' \
+--header 'Authorization: Bearer ${token}'
+
+# Ejecutar la consulta de un producto, actualizar token
+curl --location -g --request POST 'http://localhost:9001/graphql?query={product(id:1){name,price}}' \
+--header 'Authorization: Bearer ${token}'
 
 # Parar
 $ docker-compose down
