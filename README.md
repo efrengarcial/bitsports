@@ -83,6 +83,9 @@ $ cd bitsports
 # Construir la imagen docker y Ejecutar la aplicación 
 $ make run
 
+# Ejecutar las migraciones
+$ make migrate_schema
+
 # check if the containers are running
 $ docker ps
 
